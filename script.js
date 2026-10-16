@@ -1830,12 +1830,12 @@ async function initFlipbook(restore = null) {
                         true,
 
                     swipeDistance:
-                        20,
+                        30,
 
-                    /* On mobile only swipes turn pages, so taps never
-                       fight a text selection. */
+                    /* Single tap turns the page like desktop; swipes also
+                       work on mobile. */
                     disableFlipByClick:
-                        window.innerWidth <= 768,
+                        false,
 
                     startPage:
                         0

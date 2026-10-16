@@ -620,8 +620,30 @@ body {
         overflow: hidden;
     }
 
+    .mobile-controls {
+        position: static;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        top: auto;
+        width: 100%;
+        max-width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 6px 14px;
+        margin: 8px auto 0 auto;
+        background: rgba(20, 16, 10, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(232, 214, 173, 0.15);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    }
+
     .page {
-        padding: 38px 28px 55px 28px;
+        padding: 38px 28px 50px 28px;
     }
 
     .page-text p {
@@ -639,10 +661,23 @@ body {
         right: auto;
         bottom: auto;
         top: auto;
-        margin: 6px auto 0 auto;
-        width: fit-content;
+        margin: 0;
+        background: none;
+        border: none;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        padding: 0;
     }
 
+    .font-size-control {
+        gap: 3px;
+        padding: 0;
+    }
+
+    .page-jump-control {
+        gap: 6px;
+    }
     .page-jump-control input {
         width: 56px;
         padding: 10px;
