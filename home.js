@@ -1,7 +1,7 @@
 /* =========================================================
    KITABWORM - HOME PAGE
    Builds the book grid and keeps the nav bar state in sync.
-   Loaded only by Home.html.
+   Loaded only by index.html.
    ========================================================= */
 
 "use strict";
@@ -113,7 +113,7 @@ function createBookCard(filename, position) {
 
     const card = document.createElement("a");
     card.className = "book-card";
-    card.href = `index.html?book=${encodeURIComponent(filename)}`;
+    card.href = `reader.html?book=${encodeURIComponent(filename)}`;
     card.setAttribute("aria-label", `Read ${title}`);
 
     const frame = document.createElement("span");

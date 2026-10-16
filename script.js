@@ -2148,7 +2148,7 @@ function showBookChooser() {
     const link =
         document.createElement("a");
 
-    link.href = "Home.html#library";
+    link.href = "index.html#library";
     link.textContent = "Choose a book from the library";
 
 
