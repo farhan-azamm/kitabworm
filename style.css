@@ -264,6 +264,27 @@ body {
    ========================================================= */
 
 .page-number {
+    position: absolute;
+
+    bottom: 22px;
+
+    left: 0;
+    right: 0;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    color: rgba(74, 50, 24, 0.7);
+}
+
+/*
+   The measurer is a hidden copy of a page used to work out how much text
+   fits. Its page number must flow so pagination stops short of the bottom
+   and leaves the gap where the real page's number sits. The real pages keep
+   their number absolutely positioned in the same spot on every page.
+*/
+.pagination-measurer .page-number {
     position: static;
 
     bottom: auto;
@@ -271,13 +292,15 @@ body {
     left: auto;
     right: auto;
 
-    text-align: center;
+    padding-top: 8px;
+
+    height: 20px;
+
+    line-height: 20px;
 
     font-size: 12px;
 
     color: rgba(74, 50, 24, 0.7);
-
-    padding-top: 8px;
 }
 
 
@@ -653,8 +676,7 @@ body {
     }
 
     .page-number {
-        bottom: auto;
-        padding-top: 6px;
+        bottom: 18px;
     }
 
     .page-jump-control,

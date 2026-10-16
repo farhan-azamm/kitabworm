@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>check</title></head>
+<body style="margin:0">
+<iframe id="f" src="reader.html?book=emma.txt" width="1440" height="900" style="border:0"></iframe>
+<script>
+const out=[];
+function say(s){out.push(s);console.log("@@ "+s);}
+const frame=document.getElementById("f");
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+frame.addEventListener("load",()=>{
+  const win=frame.contentWindow;
+  const doc=frame.contentDocument;
+  (async()=>{
+    for(let i=0;i<400;i++){
+      if(doc.querySelectorAll(".page .page-text p").length>0 && doc.querySelector("#loading.is-done"))break;
+      await wait(50);
+    }
+    const pages=[...doc.querySelectorAll(".page")].filter(p=>p.querySelector(".page-text"));
+    // check number position is identical on every page
+    let posSame=true, bottoms=[];
+    pages.forEach(p=>{
+      const pn=p.querySelector(".page-number");
+      const r=pn.getBoundingClientRect();
+      const pr=p.getBoundingClientRect();
+      bottoms.push(Math.round(r.bottom-pr.bottom));
+    });
+    const uniq=[...new Set(bottoms)];
+    say("number bottom offset on all pages: "+JSON.stringify(bottoms));
+    say("same spot on every page: "+(uniq.length===1));
+    // gap below last text line to page bottom
+    let worst=0,worstPage=0;
+    pages.forEach((p,i)=>{
+      const text=p.querySelector(".page-text");
+      const lastP=text.lastElementChild;
+      const lr=lastP.getBoundingClientRect();
+      const pr=p.getBoundingClientRect();
+      const gap=pr.bottom-lr.bottom;
+      if(gap>worst){worst=gap;worstPage=i;}
+    });
+    say("max gap from last text line to page bottom: "+worst+"px on page "+worstPage);
+    say("overflow pages: "+pages.filter(p=>p.scrollHeight>p.clientHeight+1).length);
+    document.getElementById("o").textContent=out.join("\n");
+  })();
+});
+</script>
+<pre id="o">running</pre>
+</body>
+</html>
