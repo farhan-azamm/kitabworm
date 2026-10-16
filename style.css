@@ -74,6 +74,24 @@ body {
     align-items: center;
 }
 
+.flipbook {
+    position: relative;
+
+    visibility: hidden;
+    opacity: 0;
+
+    box-shadow:
+        0 40px 90px rgba(0, 0, 0, 0.9);
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    /* Stop the browser from zooming/pinching the page; script.js handles
+       two-finger pinches as font-size changes instead. */
+    touch-action: none;
+}
+
 
 /* =========================================================
    FLIPBOOK
@@ -593,6 +611,15 @@ body {
         background: #111;
     }
 
+    .reader-shell {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        padding-top: 0;
+        padding-bottom: 0;
+        overflow: hidden;
+    }
+
     .page {
         padding: 38px 28px 55px 28px;
     }
@@ -605,15 +632,15 @@ body {
         bottom: 18px;
     }
 
-    .page-jump-control {
-        position: fixed;
-        bottom: 16px;
-        right: 16px;
+    .page-jump-control,
+    .font-size-control {
+        position: static;
+        left: auto;
+        right: auto;
+        bottom: auto;
         top: auto;
-        transform: none;
-        flex-direction: row;
-        gap: 8px;
-        padding: 8px 12px;
+        margin: 6px auto 0 auto;
+        width: fit-content;
     }
 
     .page-jump-control input {
@@ -628,8 +655,6 @@ body {
     }
 
     .font-size-control {
-        left: 16px;
-        bottom: 16px;
         padding: 5px 6px;
         gap: 3px;
     }

@@ -212,6 +212,17 @@ let cachedSettingsKey = "";
 
 let sharedMeasurer = null;
 
+/* Height (px) reserved below the book for the controls on mobile. */
+const CONTROL_BAR_HEIGHT = 120;
+
+
+/* Pinch-to-font-size gesture state. */
+let pinchStartDistance = null;
+let pinchBaseScale = 1;
+let pinchCurrentTarget = 1;
+
+let pinchIsSetup = false;
+
 
 /* =========================================================
    TEXT SIZE
@@ -557,16 +568,16 @@ function getSettings() {
             width / coverAspect;
 
 
-        if (height > viewportHeight) {
+        if (height > viewportHeight - CONTROL_BAR_HEIGHT) {
 
             height =
                 Math.max(
                     200,
-                    viewportHeight
+                    viewportHeight - CONTROL_BAR_HEIGHT
                 );
 
 
-            width =
+                width =
                 height * coverAspect;
         }
     }
@@ -1784,7 +1795,7 @@ async function initFlipbook(restore = null) {
                         true,
 
                     flippingTime:
-                        700,
+                        500,
 
                     /*
                        Desktop:
@@ -1819,10 +1830,12 @@ async function initFlipbook(restore = null) {
                         true,
 
                     swipeDistance:
-                        30,
+                        20,
 
+                    /* On mobile only swipes turn pages, so taps never
+                       fight a text selection. */
                     disableFlipByClick:
-                        false,
+                        window.innerWidth <= 768,
 
                     startPage:
                         0
@@ -2447,6 +2460,139 @@ function setupFontSizeControl() {
 
 
 /* =========================================================
+   PINCH TO CHANGE FONT SIZE
+
+   Two fingers moving apart or together on the book change the text
+   size instead of zooming the page. The distance at gesture start is
+   compared to the live distance and mapped onto the 0.1-step scale.
+   ========================================================= */
+
+function touchDistance(touches) {
+
+    const dx =
+        touches[0].clientX -
+        touches[1].clientX;
+
+    const dy =
+        touches[0].clientY -
+        touches[1].clientY;
+
+    return Math.hypot(dx, dy);
+}
+
+
+function setupPinchGesture() {
+
+    if (pinchIsSetup) {
+        return;
+    }
+
+    if (!flipbookEl) {
+        return;
+    }
+
+    pinchIsSetup = true;
+
+
+    flipbookEl.addEventListener(
+        "touchstart",
+        (event) => {
+
+            if (
+                event.touches.length !== 2
+            ) {
+                return;
+            }
+
+            pinchStartDistance =
+                touchDistance(event.touches);
+
+            pinchBaseScale =
+                fontScale;
+
+
+            /* Stop the browser from zooming while the user pinches. */
+            event.preventDefault();
+
+        },
+        { passive: false }
+    );
+
+
+    flipbookEl.addEventListener(
+        "touchmove",
+        (event) => {
+
+            if (
+                pinchStartDistance === null ||
+                event.touches.length !== 2
+            ) {
+                return;
+            }
+
+            const ratio =
+                touchDistance(event.touches) /
+                pinchStartDistance;
+
+            const target =
+                snapFontScale(
+                    pinchBaseScale * ratio
+                );
+
+            /*
+               Apply the size straight away so the text responds while the
+               fingers are still moving. The expensive re-pagination waits
+               until the gesture ends.
+            */
+
+            document.documentElement.style.setProperty(
+                "--reader-font-scale",
+                String(target)
+            );
+
+            pinchCurrentTarget = target;
+
+            updateFontControl();
+
+            event.preventDefault();
+
+        },
+        { passive: false }
+    );
+
+
+    flipbookEl.addEventListener(
+        "touchend",
+        () => {
+
+            pinchStartDistance = null;
+
+
+            /*
+               Re-paginate once at the final size so the pages fit the text
+               exactly.
+            */
+
+            if (bookText) {
+                setFontScale(pinchCurrentTarget);
+            }
+
+        }
+    );
+
+
+    flipbookEl.addEventListener(
+        "touchcancel",
+        () => {
+
+            pinchStartDistance = null;
+
+        }
+    );
+}
+
+
+/* =========================================================
    START
    ========================================================= */
 
@@ -2466,6 +2612,8 @@ function start() {
     applyFontScale();
 
     setupFontSizeControl();
+
+    setupPinchGesture();
 
     queueFlipbookInit();
 }
