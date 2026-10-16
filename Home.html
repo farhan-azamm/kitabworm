@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KitabWorm - Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="home.css">
+</head>
+<body>
+    <nav class="site-nav">
+        <a href="#" class="nav-brand">KitabWorm</a>
+        <ul class="nav-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#library">Library</a></li>
+            <li><a href="#">Discussions</a></li>
+            <li><a href="#">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero-header">
+        <div class="hero-frame" aria-hidden="true">
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
+            <span class="fleuron top">❦</span>
+            <span class="fleuron bottom">❦</span>
+        </div>
+
+        <div class="header-inner">
+            <div class="header-image-wrapper">
+                <img src="assets/girl_reading.jpeg" alt="Reader holding a book">
+            </div>
+            <div class="header-text">
+                <span class="header-label">Welcome to the Club</span>
+                <h1>
+                    <span><span class="h1-initial">T</span>urn pages</span>
+                    <span class="h1-gold">start conversations</span>
+                </h1>
+                <div class="ornament-rule" aria-hidden="true">✦</div>
+                <p class="tagline">The place where all the bookworms gather and read and discuss books.</p>
+                <div class="header-actions">
+                    <a href="#library" class="btn btn-primary">Browse the library</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main id="library" class="home-container library-section">
+        <div class="library-heading">
+            <p>The Collection</p>
+            <h2>Choose a book to begin reading</h2>
+            <p class="collection-count" id="collectionCount"></p>
+            <div class="ornament-rule" aria-hidden="true">❦</div>
+        </div>
+        <div id="booksGrid" class="books-grid" aria-label="Available books"></div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-brand">KitabWorm</div>
+        <div>A quiet corner for readers — pick a book, turn the page, join the discussion.</div>
+    </footer>
+
+    <script src="home.js"></script>
+</body>
+</html>
