@@ -264,18 +264,20 @@ body {
    ========================================================= */
 
 .page-number {
-    position: absolute;
+    position: static;
 
-    bottom: 22px;
+    bottom: auto;
 
-    left: 0;
-    right: 0;
+    left: auto;
+    right: auto;
 
     text-align: center;
 
     font-size: 12px;
 
     color: rgba(74, 50, 24, 0.7);
+
+    padding-top: 8px;
 }
 
 
@@ -651,7 +653,8 @@ body {
     }
 
     .page-number {
-        bottom: 18px;
+        bottom: auto;
+        padding-top: 6px;
     }
 
     .page-jump-control,

@@ -691,6 +691,8 @@ function configureMeasurer(measurer) {
 
         <div class="page-text"></div>
 
+        <div class="page-number">&nbsp;</div>
+
     `;
 
 
@@ -1762,6 +1764,17 @@ async function initFlipbook(restore = null) {
         =====================================================
         */
 
+        /*
+           Going backward used to feel slower than going forward because
+           the shadow is drawn on the arriving page. On mobile the shadow
+           is heavier, so the difference is more noticeable. Make the flip
+           duration and shadow weight the same in both directions by
+           lightening them on mobile.
+        */
+
+        const isMobile =
+            settings.usePortrait;
+
         pageFlip =
             new St.PageFlip(
                 flipbookEl,
@@ -1795,7 +1808,7 @@ async function initFlipbook(restore = null) {
                         true,
 
                     flippingTime:
-                        500,
+                        isMobile ? 380 : 500,
 
                     /*
                        Desktop:
@@ -1818,10 +1831,10 @@ async function initFlipbook(restore = null) {
                         true,
 
                     maxShadowOpacity:
-                        0.95,
+                        isMobile ? 0.55 : 0.95,
 
                     showPageCorners:
-                        true,
+                        isMobile ? false : true,
 
                     clickEventForward:
                         true,
