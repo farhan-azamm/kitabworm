@@ -160,7 +160,7 @@ body {
 
     display: block;
 
-    padding: 58px 55px 65px 55px;
+    padding: 58px 55px 8px 55px;
 
     text-align: left;
 
@@ -291,8 +291,6 @@ body {
 
     left: auto;
     right: auto;
-
-    padding-top: 8px;
 
     height: 20px;
 
@@ -609,7 +607,7 @@ body {
     }
 
     .page {
-        padding: 45px 42px 55px 42px;
+        padding: 45px 42px 8px 42px;
     }
 
     .page-text p {
@@ -640,7 +638,7 @@ body {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
-        padding-top: 0;
+        padding-top: max(12px, env(safe-area-inset-top));
         padding-bottom: 0;
         overflow: hidden;
     }
@@ -668,7 +666,7 @@ body {
     }
 
     .page {
-        padding: 38px 28px 50px 28px;
+        padding: 38px 28px 6px 28px;
     }
 
     .page-text p {
@@ -743,7 +741,7 @@ body {
     }
 
     .page {
-        padding: 30px 22px 50px 22px;
+        padding: 30px 22px 6px 22px;
     }
 
     .page-text p {

@@ -1765,11 +1765,8 @@ async function initFlipbook(restore = null) {
         */
 
         /*
-           Going backward used to feel slower than going forward because
-           the shadow is drawn on the arriving page. On mobile the shadow
-           is heavier, so the difference is more noticeable. Make the flip
-           duration and shadow weight the same in both directions by
-           lightening them on mobile.
+           On mobile, prioritize a responsive gesture and fluid animation:
+           use a shorter flip and skip the expensive page shadows.
         */
 
         const isMobile =
@@ -1805,10 +1802,10 @@ async function initFlipbook(restore = null) {
                         true,
 
                     mobileScrollSupport:
-                        true,
+                        !isMobile,
 
                     flippingTime:
-                        isMobile ? 380 : 500,
+                        isMobile ? 260 : 500,
 
                     /*
                        Desktop:
@@ -1828,13 +1825,13 @@ async function initFlipbook(restore = null) {
                         false,
 
                     drawShadow:
-                        true,
+                        !isMobile,
 
                     maxShadowOpacity:
                         isMobile ? 0.55 : 0.95,
 
                     showPageCorners:
-                        isMobile ? false : true,
+                        true,
 
                     clickEventForward:
                         true,
@@ -1843,12 +1840,13 @@ async function initFlipbook(restore = null) {
                         true,
 
                     swipeDistance:
-                        30,
+                        isMobile ? 10 : 24,
 
-                    /* Single tap turns the page like desktop; swipes also
-                       work on mobile. */
+                    /* Keep the reading area passive: use either corner or
+                       edge tap/click to turn, and drag from the top or
+                       bottom corner for a natural page fold. */
                     disableFlipByClick:
-                        false,
+                        true,
 
                     startPage:
                         0
@@ -1863,6 +1861,49 @@ async function initFlipbook(restore = null) {
         pageFlip.loadFromHTML(
             nodes
         );
+
+
+        /*
+           The library waits briefly before it treats a touch as a drag.
+           On a reader there is no page scroll to protect, so begin the
+           fold immediately. Its existing touch-end handler still handles
+           quick edge swipes and normal drag completion.
+        */
+        if (isMobile) {
+
+            const flipUi = pageFlip.getUI();
+
+            flipUi.removeHandlers();
+
+            flipUi.onTouchStart = event => {
+
+                if (
+                    !flipUi.checkTarget(event.target)
+                    || event.changedTouches.length === 0
+                ) {
+                    return;
+                }
+
+                const touch = event.changedTouches[0];
+                const point = flipUi.getMousePos(
+                    touch.clientX,
+                    touch.clientY
+                );
+
+                flipUi.touchPoint = {
+                    point,
+                    time: Date.now()
+                };
+
+                pageFlip.startUserTouch(point);
+
+                if (event.cancelable) {
+                    event.preventDefault();
+                }
+            };
+
+            flipUi.setHandlers();
+        }
 
 
         /*
